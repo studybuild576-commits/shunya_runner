@@ -1,7 +1,7 @@
-// IMPORTS
 import 'package:flame/components.dart';
-import 'package:flame/events.dart' as flame_events; // Alias for Flame events
+import 'package:flame/events.dart';
 import 'package:flame/game.dart';
+import 'package:flame/input.dart'; // Required for HasTappables, HasDraggables
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -17,9 +17,11 @@ void main() {
 }
 
 class ShunyaRunnerGame extends Forge2DGame
-    with KeyboardEvents, flame_events.PointerMoveCallbacks, TapCallbacks {
+    with HasKeyboardHandlerComponents, HasTappables, HasDraggables {
   late PlayerBody player;
   Vector2 mousePosition = Vector2.zero();
+
+  ShunyaRunnerGame() : super(gravity: Vector2.zero());
 
   @override
   Future<void> onLoad() async {
@@ -29,7 +31,7 @@ class ShunyaRunnerGame extends Forge2DGame
     camera.viewfinder.zoom = 1.5;
     camera.viewfinder.anchor = Anchor.center;
 
-    // Floor sprite (simple version)
+    // Floor sprite
     final sprite = await loadSprite('floor_tile.png');
     add(
       SpriteComponent(
@@ -57,15 +59,17 @@ class ShunyaRunnerGame extends Forge2DGame
     player.lookAt(mousePosition);
   }
 
+  // Drag/Pointer movement handling
   @override
-  void onPointerMove(flame_events.PointerMoveEvent event) {
-    mousePosition = screenToWorld(event.localPosition);
+  bool onDragUpdate(int pointerId, DragUpdateInfo info) {
+    mousePosition = info.eventPosition.game;
+    return true;
   }
 
+  // Tap handling
   @override
-  void onTapDown(TapDownEvent event) {
-    super.onTapDown(event);
-    final tapPosition = screenToWorld(event.localPosition);
+  bool onTapDown(int pointerId, TapDownInfo info) {
+    final tapPosition = info.eventPosition.game;
     final direction = (tapPosition - player.body.position)..normalize();
     final velocity = direction * 500.0;
 
@@ -74,13 +78,12 @@ class ShunyaRunnerGame extends Forge2DGame
       initialVelocity: velocity,
     );
     add(bullet);
+    return true;
   }
 
+  // Keyboard handling
   @override
-  KeyEventResult onKeyEvent(
-    KeyEvent event,
-    Set<LogicalKeyboardKey> keysPressed,
-  ) {
+  bool onKeyEvent(RawKeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
     Vector2 newMovement = Vector2.zero();
     if (keysPressed.contains(LogicalKeyboardKey.keyW)) newMovement.y = -1;
     if (keysPressed.contains(LogicalKeyboardKey.keyS)) newMovement.y = 1;
@@ -88,6 +91,6 @@ class ShunyaRunnerGame extends Forge2DGame
     if (keysPressed.contains(LogicalKeyboardKey.keyD)) newMovement.x = 1;
 
     player.movement = newMovement;
-    return super.onKeyEvent(event, keysPressed);
+    return true;
   }
 }
