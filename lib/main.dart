@@ -1,5 +1,5 @@
 import 'dart:ui' as ui;
-import 'package:vector_math/vector_math_64.dart' as vector_math_64; // <-- Use the 64-bit version
+import 'package.vector_math/vector_math_64.dart' as vector_math_64;
 
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
@@ -14,11 +14,11 @@ import 'package:shunya_runner/components/player.dart';
 
 void main() {
   runApp(
-    GameWidget(game: Shunya_RunnerGame()),
+    GameWidget(game: ShunyaRunnerGame()), // Corrected name
   );
 }
 
-class Shunya_RunnerGame extends Forge2DGame
+class ShunyaRunnerGame extends Forge2DGame // Corrected name
     with KeyboardEvents, PointerMoveCallbacks, TapCallbacks {
   late PlayerBody player;
   Vector2 mousePosition = Vector2.zero();
@@ -35,7 +35,7 @@ class Shunya_RunnerGame extends Forge2DGame
         image,
         ui.TileMode.repeated,
         ui.TileMode.repeated,
-        vector_math_64.Matrix4.identity().storage, // <-- Use the 64-bit Matrix4
+        vector_math_64.Matrix4.identity().storage,
       );
 
     add(
