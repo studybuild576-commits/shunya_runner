@@ -1,6 +1,7 @@
 import 'dart:math';
-import 'package:flutter/material.dart';
+import 'package:flame/extensions.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
+import 'package:flutter/material.dart';
 
 class PlayerBody extends BodyComponent {
   @override
@@ -57,6 +58,6 @@ class PlayerBody extends BodyComponent {
       ..strokeWidth = 2;
 
     final directionVector = Vector2(cos(body.angle) * radius, sin(body.angle) * radius);
-    canvas.drawLine(Offset.zero, Offset(directionVector.x, directionVector.y), directionPaint);
+    canvas.drawLine(Offset.zero, directionVector.toOffset(), directionPaint);
   }
 }
