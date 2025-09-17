@@ -1,5 +1,5 @@
+import 'package:flame/components.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
-import 'package:flutter/material.dart';
 import 'package:shunya_runner/components/player.dart';
 
 class EnemyBody extends BodyComponent with ContactCallbacks {
@@ -12,6 +12,20 @@ class EnemyBody extends BodyComponent with ContactCallbacks {
   EnemyBody({required this.position, required this.player});
 
   @override
+  Future<void> onLoad() async {
+    await super.onLoad();
+    // Sprite (image) ko load karega
+    final sprite = await game.loadSprite('enemy.png');
+    add(
+      SpriteComponent(
+        sprite: sprite,
+        size: Vector2.all(radius * 2.5), // Image ka size adjust kiya
+        anchor: Anchor.center,
+      ),
+    );
+  }
+
+  @override
   Body createBody() {
     final bodyDef = BodyDef(
       type: BodyType.dynamic,
@@ -20,11 +34,13 @@ class EnemyBody extends BodyComponent with ContactCallbacks {
       userData: this,
     );
     final enemyBody = world.createBody(bodyDef);
-    final shape = CircleShape()..radius = radius;
+    
+    // CircleShape banane ka sahi tarika
+    final shape = CircleShape(radius: radius);
+
     final fixtureDef = FixtureDef(shape)
       ..density = 0.8
-      ..friction = 0.3
-      ..restitution = 0.2;
+      ..friction = 0.3;
     enemyBody.createFixture(fixtureDef);
     return enemyBody;
   }
@@ -32,19 +48,11 @@ class EnemyBody extends BodyComponent with ContactCallbacks {
   @override
   void update(double dt) {
     super.update(dt);
-    if (!isMounted) return; // ✅ ensure body is initialized
-    if (!player.isMounted) return;
+    if (!isMounted || !player.isMounted) return; // Aapka safe check
 
     final direction = (player.body.position - body.position)..normalize();
     body.linearVelocity = direction * speed;
   }
 
-  @override
-  void render(Canvas canvas) {
-    super.render(canvas);
-    final paint = Paint()
-      ..color = Colors.pink.shade300
-      ..style = PaintingStyle.fill;
-    canvas.drawCircle(Offset.zero, radius, paint);
-  }
+  // render method hata diya gaya hai
 }
