@@ -41,13 +41,13 @@ class PlayerBody extends BodyComponent {
   @override
   void update(double dt) {
     super.update(dt);
-    if (body.isInitialized) {
+    if (body.world != null) {   // ✅ Fixed
       body.linearVelocity = movement * speed;
     }
   }
 
   void lookAt(Vector2 target) {
-    if (!body.isInitialized) return;
+    if (body.world == null) return;   // ✅ Fixed
     final angle = atan2(target.y - body.position.y, target.x - body.position.x);
     body.setTransform(body.position, angle);
   }
@@ -60,7 +60,7 @@ class PlayerBody extends BodyComponent {
       ..style = PaintingStyle.fill;
     canvas.drawCircle(Offset.zero, radius, paint);
 
-    if (body.isInitialized) {
+    if (body.world != null) {   // ✅ Fixed
       final directionPaint = Paint()
         ..color = Colors.white
         ..strokeWidth = 2;
