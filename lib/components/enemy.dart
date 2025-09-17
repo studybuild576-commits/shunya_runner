@@ -32,6 +32,7 @@ class EnemyBody extends BodyComponent with ContactCallbacks {
   @override
   void update(double dt) {
     super.update(dt);
+    if (!body.isInitialized || !player.body.isInitialized) return;
     final direction = (player.body.position - body.position)..normalize();
     body.linearVelocity = direction * speed;
   }
