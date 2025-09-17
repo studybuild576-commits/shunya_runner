@@ -53,7 +53,6 @@ class PlayerBody extends BodyComponent {
     final directionPaint = Paint()
       ..color = Colors.white
       ..strokeWidth = 2;
-    // Code ab simple ho gaya hai
     final directionVector = Vector2(cos(body.angle) * radius, sin(body.angle) * radius);
     canvas.drawLine(Offset.zero, directionVector.toOffset(), directionPaint);
   }
