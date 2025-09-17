@@ -8,12 +8,20 @@ import 'package:shunya_runner/components/enemy.dart';
 import 'package:shunya_runner/components/player.dart';
 
 void main() {
-  runApp(GameWidget(game: ShunyaRunnerGame()));
+  runApp(
+    MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: Scaffold(
+        body: GameWidget(
+          game: ShunyaRunnerGame(),
+        ),
+      ),
+    ),
+  );
 }
 
 class ShunyaRunnerGame extends Forge2DGame
     with KeyboardEvents, PointerMoveCallbacks, TapCallbacks {
-
   PlayerBody? player; // nullable for safety
   Vector2 mousePosition = Vector2.zero();
 
@@ -55,7 +63,8 @@ class ShunyaRunnerGame extends Forge2DGame
   }
 
   @override
-  KeyEventResult onKeyEvent(KeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
+  KeyEventResult onKeyEvent(
+      KeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
     if (player == null) return KeyEventResult.ignored;
 
     Vector2 newMovement = Vector2.zero();
