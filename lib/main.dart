@@ -1,13 +1,15 @@
 import 'package:flame/events.dart';
-import 'package:flame/game.dart';
-import 'package:flame_forge2d/flame_forge2d.dart';
-import 'package:flutter/material.dart' hide PointerMoveEvent; 
+import 'package:flame/game.dart' hide Vector2; // ✅ hide Vector2 to avoid clash
+import 'package:flame_forge2d/flame_forge2d.dart' show Forge2DGame, Vector2;
+import 'package:flutter/material.dart' hide PointerMoveEvent;
 import 'package:flutter/services.dart';
 import 'package:shunya_runner/components/bullet.dart';
 import 'package:shunya_runner/components/player.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    GameWidget(game: ShunyaRunnerGame()),
+  );
 }
 
 class ShunyaRunnerGame extends Forge2DGame
@@ -38,10 +40,10 @@ class ShunyaRunnerGame extends Forge2DGame
   void onTapDown(TapDownEvent event) {
     super.onTapDown(event);
     final bullet = BulletBody(position: player.body.position.clone());
-    
+
     final tapPosition = screenToWorld(event.localPosition);
     final direction = (tapPosition - player.body.position)..normalize();
-    
+
     bullet.body.linearVelocity = direction * 500.0;
     add(bullet);
   }
@@ -60,16 +62,5 @@ class ShunyaRunnerGame extends Forge2DGame
 
     player.movement = newMovement;
     return super.onKeyEvent(event, keysPressed);
-  }
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: GameWidget(game: ShunyaRunnerGame()),
-    );
   }
 }
