@@ -3,12 +3,11 @@ import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:shunya_runner/components/enemy.dart';
 
 class BulletBody extends BodyComponent with ContactCallbacks {
-  @override
-  final Vector2 position;
+  final Vector2 initialPosition;
   final Vector2 initialVelocity;
   final double radius = 3.0;
 
-  BulletBody({required this.position, required this.initialVelocity});
+  BulletBody({required this.initialPosition, required this.initialVelocity});
 
   @override
   Future<void> onLoad() async {
@@ -27,7 +26,11 @@ class BulletBody extends BodyComponent with ContactCallbacks {
 
   @override
   Body createBody() {
-    final bodyDef = BodyDef(type: BodyType.dynamic, position: position, bullet: true, userData: this);
+    final bodyDef = BodyDef(
+        type: BodyType.dynamic,
+        position: initialPosition,
+        bullet: true,
+        userData: this);
     final bulletBody = world.createBody(bodyDef);
     final shape = CircleShape(radius: radius);
     final fixtureDef = FixtureDef(shape)..isSensor = true;
