@@ -1,39 +1,44 @@
 import 'package:flame/components.dart';
+import 'package:flame/events.dart';
 import 'package:flame/game.dart';
-import 'package:flame/input.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide PointerMoveEvent;
 import 'package:flutter/services.dart';
-
-import 'components/player.dart';
-import 'components/enemy.dart';
-import 'components/bullet.dart';
-import 'components/arena.dart';
+import 'package:shunya_runner/components/arena.dart';
+import 'package:shunya_runner/components/bullet.dart';
+import 'package:shunya_runner/components/enemy.dart';
+import 'package:shunya_runner/components/player.dart';
 
 void main() {
-  runApp(GameWidget(game: ShunyaRunnerGame()));
+  runApp(
+    GameWidget(game: ShunyaRunnerGame()),
+  );
 }
 
-class ShunyaRunnerGame extends Forge2DGame with HasKeyboardHandlerComponents, HasDraggables, HasTappables {
+class ShunyaRunnerGame extends Forge2DGame
+    with KeyboardEvents, PointerMoveCallbacks, TapCallbacks {
   late PlayerBody player;
-
-  ShunyaRunnerGame() : super(gravity: Vector2.zero());
+  Vector2 mousePosition = Vector2.zero();
 
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-
-    // Camera zoom
     camera.viewfinder.zoom = 1.5;
+    camera.viewfinder.anchor = Anchor.center;
 
-    // Arena
+    final sprite = await loadSprite('floor_tile.png');
+    add(
+      SpriteRepeatComponent(
+        sprite: sprite,
+        size: Vector2.all(400),
+      )..anchor = Anchor.center,
+    );
+
     add(Arena(size: Vector2.all(200)));
 
-    // Player
     player = PlayerBody(position: Vector2.zero());
     add(player);
 
-    // Enemies
     add(EnemyBody(position: Vector2(100, 100), player: player));
     add(EnemyBody(position: Vector2(-100, -100), player: player));
   }
@@ -41,53 +46,38 @@ class ShunyaRunnerGame extends Forge2DGame with HasKeyboardHandlerComponents, Ha
   @override
   void update(double dt) {
     super.update(dt);
-
-    // Camera follow player
-    camera.followVector2(player.body.position);
+    player.lookAt(mousePosition);
   }
-}
-
-// Keyboard input handler
-class PlayerKeyboard extends Component with KeyboardHandlerComponent {
-  final PlayerBody player;
-
-  PlayerKeyboard({required this.player});
 
   @override
-  KeyEventResult onKeyEvent(KeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
+  void onPointerMove(PointerMoveEvent event) {
+    mousePosition = screenToWorld(event.localPosition);
+  }
+
+  @override
+  void onTapDown(TapDownEvent event) {
+    super.onTapDown(event);
+    final tapPosition = screenToWorld(event.localPosition);
+    final direction = (tapPosition - player.body.position)..normalize();
+    final velocity = direction * 500.0;
+    final bullet = BulletBody(
+      position: player.body.position.clone(),
+      initialVelocity: velocity,
+    );
+    add(bullet);
+  }
+
+  @override
+  KeyEventResult onKeyEvent(
+    KeyEvent event,
+    Set<LogicalKeyboardKey> keysPressed,
+  ) {
     Vector2 newMovement = Vector2.zero();
     if (keysPressed.contains(LogicalKeyboardKey.keyW)) newMovement.y = -1;
     if (keysPressed.contains(LogicalKeyboardKey.keyS)) newMovement.y = 1;
     if (keysPressed.contains(LogicalKeyboardKey.keyA)) newMovement.x = -1;
     if (keysPressed.contains(LogicalKeyboardKey.keyD)) newMovement.x = 1;
-
     player.movement = newMovement;
-    return KeyEventResult.handled;
-  }
-}
-
-// Mouse drag & tap handler
-class PlayerMouse extends PositionComponent with TapDetector, DragDetector {
-  final PlayerBody player;
-
-  PlayerMouse({required this.player});
-
-  @override
-  void onTapDown(TapDownInfo info) {
-    final tapPosition = info.eventPosition.game;
-    final direction = (tapPosition - player.body.position)..normalize();
-    final velocity = direction * 500.0;
-
-    final bullet = BulletBody(
-      position: player.body.position.clone(),
-      initialVelocity: velocity,
-    );
-    parent?.add(bullet);
-  }
-
-  @override
-  void onDragUpdate(DragUpdateInfo info) {
-    final pos = info.eventPosition.game;
-    player.lookAt(pos);
+    return super.onKeyEvent(event, keysPressed);
   }
 }
