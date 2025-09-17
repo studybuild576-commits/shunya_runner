@@ -2,7 +2,7 @@ import 'dart:math';
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:flutter/material.dart';
 
-// Extension to convert Vector2 to Offset
+// Extension: Vector2 -> Offset
 extension Vector2Extension on Vector2 {
   Offset toOffset() => Offset(x, y);
 }
@@ -41,10 +41,13 @@ class PlayerBody extends BodyComponent {
   @override
   void update(double dt) {
     super.update(dt);
-    body.linearVelocity = movement * speed;
+    if (body.isInitialized) {
+      body.linearVelocity = movement * speed;
+    }
   }
 
   void lookAt(Vector2 target) {
+    if (!body.isInitialized) return;
     final angle = atan2(target.y - body.position.y, target.x - body.position.x);
     body.setTransform(body.position, angle);
   }
@@ -57,11 +60,13 @@ class PlayerBody extends BodyComponent {
       ..style = PaintingStyle.fill;
     canvas.drawCircle(Offset.zero, radius, paint);
 
-    final directionPaint = Paint()
-      ..color = Colors.white
-      ..strokeWidth = 2;
-
-    final directionVector = Vector2(cos(body.angle) * radius, sin(body.angle) * radius);
-    canvas.drawLine(Offset.zero, directionVector.toOffset(), directionPaint);
+    if (body.isInitialized) {
+      final directionPaint = Paint()
+        ..color = Colors.white
+        ..strokeWidth = 2;
+      final directionVector =
+          Vector2(cos(body.angle) * radius, sin(body.angle) * radius);
+      canvas.drawLine(Offset.zero, directionVector.toOffset(), directionPaint);
+    }
   }
 }
