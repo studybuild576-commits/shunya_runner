@@ -1,8 +1,10 @@
 import 'dart:math';
-// BADLAAV 1: Import ko simple kiya gaya
-import 'package:flame/extensions.dart';
-import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:flutter/material.dart';
+
+// Explicitly import Vector2 from vector_math_64
+import 'package:vector_math/vector_math_64.dart' show Vector2;
+
+import 'package:flame_forge2d/flame_forge2d.dart';
 
 class PlayerBody extends BodyComponent {
   @override
@@ -23,14 +25,14 @@ class PlayerBody extends BodyComponent {
       userData: this,
     );
     final playerBody = world.createBody(bodyDef);
-    
-    // BADLAAV 2: CircleShape banane ka sahi tarika
-    final shape = CircleShape(radius: radius);
+
+    final shape = CircleShape()..radius = radius;
 
     final fixtureDef = FixtureDef(shape)
       ..density = 1.0
       ..friction = 0.4
       ..restitution = 0.1;
+
     playerBody.createFixture(fixtureDef);
     return playerBody;
   }
@@ -40,7 +42,7 @@ class PlayerBody extends BodyComponent {
     super.update(dt);
     body.linearVelocity = movement * speed;
   }
-  
+
   void lookAt(Vector2 target) {
     final angle = atan2(target.y - body.position.y, target.x - body.position.x);
     body.setTransform(body.position, angle);
@@ -57,7 +59,8 @@ class PlayerBody extends BodyComponent {
     final directionPaint = Paint()
       ..color = Colors.white
       ..strokeWidth = 2;
+
     final directionVector = Vector2(cos(body.angle) * radius, sin(body.angle) * radius);
-    canvas.drawLine(Offset.zero, directionVector.toOffset(), directionPaint);
+    canvas.drawLine(Offset.zero, Offset(directionVector.x, directionVector.y), directionPaint);
   }
 }
