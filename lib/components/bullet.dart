@@ -2,6 +2,8 @@ import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:flutter/material.dart';
 
 class BulletBody extends BodyComponent {
+  // YAHAN BADLAAV KIYA GAYA HAI: @override add kiya
+  @override
   final Vector2 position;
   final double radius = 1.5;
 
