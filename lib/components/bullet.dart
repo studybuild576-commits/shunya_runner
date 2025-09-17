@@ -6,7 +6,7 @@ class BulletBody extends BodyComponent with ContactCallbacks {
   @override
   final Vector2 position;
   final Vector2 initialVelocity;
-  final double radius = 3.0; // Thoda bada kiya
+  final double radius = 3.0;
 
   BulletBody({required this.position, required this.initialVelocity});
 
@@ -15,7 +15,6 @@ class BulletBody extends BodyComponent with ContactCallbacks {
     await super.onLoad();
     body.linearVelocity = initialVelocity;
 
-    // BADLAAV 1: Sprite (image) ko load karega
     final sprite = await game.loadSprite('bullet.png');
     add(
       SpriteComponent(
@@ -28,12 +27,7 @@ class BulletBody extends BodyComponent with ContactCallbacks {
 
   @override
   Body createBody() {
-    final bodyDef = BodyDef(
-      type: BodyType.dynamic,
-      position: position,
-      bullet: true,
-      userData: this,
-    );
+    final bodyDef = BodyDef(type: BodyType.dynamic, position: position, bullet: true, userData: this);
     final bulletBody = world.createBody(bodyDef);
     final shape = CircleShape(radius: radius);
     final fixtureDef = FixtureDef(shape)..isSensor = true;
@@ -48,6 +42,4 @@ class BulletBody extends BodyComponent with ContactCallbacks {
       removeFromParent();
     }
   }
-
-  // BADLAAV 2: render method hata diya gaya hai
 }
