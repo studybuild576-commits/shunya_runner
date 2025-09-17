@@ -12,12 +12,12 @@ dependencies:
 
   cupertino_icons: ^1.0.8
   flame: ^1.17.0
-  flame_forge2d: ^0.18.0   # ✅ ye version lagana zaroori hai
-    vector_math: ^2.1.4
+  flame_forge2d: ^0.18.0
+  vector_math: ^2.1.4   # 👈 ab sahi jagah pe hai
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
   flutter_lints: ^4.0.0
 
 flutter:
