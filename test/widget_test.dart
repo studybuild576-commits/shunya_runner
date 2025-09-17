@@ -1,12 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:flame/game.dart'; // ✅ for GameWidget
 import 'package:shunya_runner/main.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    await tester.pumpWidget(const MyApp());
+  testWidgets('GameWidget loads smoke test', (WidgetTester tester) async {
+    // Build our game widget
+    await tester.pumpWidget(
+      const MaterialApp(
+        home: Scaffold(
+          body: GameWidget(game: ShunyaRunnerGame()),
+        ),
+      ),
+    );
 
-    // Dummy test just to check widget builds
+    // Verify that GameWidget is present
     expect(find.byType(GameWidget), findsOneWidget);
   });
 }
