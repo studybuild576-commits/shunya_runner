@@ -1,21 +1,29 @@
+import 'package:flame/components.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
-import 'package:flutter/material.dart';
-// YAHAN BADLAAV KIYA GAYA HAI: Import path theek kiya gaya
 import 'package:shunya_runner/components/enemy.dart';
 
 class BulletBody extends BodyComponent with ContactCallbacks {
   @override
   final Vector2 position;
-  final Vector2 initialVelocity; // Yeh parameter zaroori hai
-  final double radius = 1.5;
+  final Vector2 initialVelocity;
+  final double radius = 3.0; // Thoda bada kiya
 
-  // Constructor ko update kiya gaya
   BulletBody({required this.position, required this.initialVelocity});
 
   @override
   Future<void> onLoad() async {
     await super.onLoad();
     body.linearVelocity = initialVelocity;
+
+    // BADLAAV 1: Sprite (image) ko load karega
+    final sprite = await game.loadSprite('bullet.png');
+    add(
+      SpriteComponent(
+        sprite: sprite,
+        size: Vector2.all(radius * 2),
+        anchor: Anchor.center,
+      ),
+    );
   }
 
   @override
@@ -41,12 +49,5 @@ class BulletBody extends BodyComponent with ContactCallbacks {
     }
   }
 
-  @override
-  void render(Canvas canvas) {
-    super.render(canvas);
-    final paint = Paint()
-      ..color = Colors.yellow
-      ..style = PaintingStyle.fill;
-    canvas.drawCircle(Offset.zero, radius, paint);
-  }
+  // BADLAAV 2: render method hata diya gaya hai
 }
