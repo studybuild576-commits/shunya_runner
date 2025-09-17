@@ -1,9 +1,10 @@
 import 'package:flame/events.dart';
-import 'package:flame/game.dart' hide Vector2; // ✅ hide Vector2 to avoid clash
-import 'package:flame_forge2d/flame_forge2d.dart' show Forge2DGame, Vector2;
+import 'package:flame/game.dart';
+import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:flutter/material.dart' hide PointerMoveEvent;
 import 'package:flutter/services.dart';
 import 'package:shunya_runner/components/bullet.dart';
+import 'package:shunya_runner/components/enemy.dart';
 import 'package:shunya_runner/components/player.dart';
 
 void main() {
@@ -21,8 +22,12 @@ class ShunyaRunnerGame extends Forge2DGame
   Future<void> onLoad() async {
     await super.onLoad();
     camera.viewfinder.zoom = 10.0;
+
     player = PlayerBody(position: Vector2.zero());
     add(player);
+
+    add(EnemyBody(position: Vector2(100, 100), player: player));
+    add(EnemyBody(position: Vector2(-100, -100), player: player));
   }
 
   @override
@@ -40,10 +45,11 @@ class ShunyaRunnerGame extends Forge2DGame
   void onTapDown(TapDownEvent event) {
     super.onTapDown(event);
     final bullet = BulletBody(position: player.body.position.clone());
-
+    
+    // Typo theek ki gayi hai: screenToWorld
     final tapPosition = screenToWorld(event.localPosition);
     final direction = (tapPosition - player.body.position)..normalize();
-
+    
     bullet.body.linearVelocity = direction * 500.0;
     add(bullet);
   }
