@@ -41,13 +41,10 @@ class PlayerBody extends BodyComponent {
   @override
   void update(double dt) {
     super.update(dt);
-    if (body.world != null) {   // ✅ Fixed
-      body.linearVelocity = movement * speed;
-    }
+    body.linearVelocity = movement * speed;
   }
 
   void lookAt(Vector2 target) {
-    if (body.world == null) return;   // ✅ Fixed
     final angle = atan2(target.y - body.position.y, target.x - body.position.x);
     body.setTransform(body.position, angle);
   }
@@ -60,13 +57,11 @@ class PlayerBody extends BodyComponent {
       ..style = PaintingStyle.fill;
     canvas.drawCircle(Offset.zero, radius, paint);
 
-    if (body.world != null) {   // ✅ Fixed
-      final directionPaint = Paint()
-        ..color = Colors.white
-        ..strokeWidth = 2;
-      final directionVector =
-          Vector2(cos(body.angle) * radius, sin(body.angle) * radius);
-      canvas.drawLine(Offset.zero, directionVector.toOffset(), directionPaint);
-    }
+    final directionPaint = Paint()
+      ..color = Colors.white
+      ..strokeWidth = 2;
+    final directionVector =
+        Vector2(cos(body.angle) * radius, sin(body.angle) * radius);
+    canvas.drawLine(Offset.zero, directionVector.toOffset(), directionPaint);
   }
 }
