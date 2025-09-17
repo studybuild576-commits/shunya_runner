@@ -14,12 +14,11 @@ class EnemyBody extends BodyComponent with ContactCallbacks {
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-    // Sprite (image) ko load karega
     final sprite = await game.loadSprite('enemy.png');
     add(
       SpriteComponent(
         sprite: sprite,
-        size: Vector2.all(radius * 2.5), // Image ka size adjust kiya
+        size: Vector2.all(radius * 2.5),
         anchor: Anchor.center,
       ),
     );
@@ -27,20 +26,10 @@ class EnemyBody extends BodyComponent with ContactCallbacks {
 
   @override
   Body createBody() {
-    final bodyDef = BodyDef(
-      type: BodyType.dynamic,
-      position: position,
-      fixedRotation: true,
-      userData: this,
-    );
+    final bodyDef = BodyDef(type: BodyType.dynamic, position: position, fixedRotation: true, userData: this);
     final enemyBody = world.createBody(bodyDef);
-    
-    // CircleShape banane ka sahi tarika
     final shape = CircleShape(radius: radius);
-
-    final fixtureDef = FixtureDef(shape)
-      ..density = 0.8
-      ..friction = 0.3;
+    final fixtureDef = FixtureDef(shape)..density = 0.8..friction = 0.3;
     enemyBody.createFixture(fixtureDef);
     return enemyBody;
   }
@@ -48,11 +37,8 @@ class EnemyBody extends BodyComponent with ContactCallbacks {
   @override
   void update(double dt) {
     super.update(dt);
-    if (!isMounted || !player.isMounted) return; // Aapka safe check
-
+    if (!player.isMounted) return;
     final direction = (player.body.position - body.position)..normalize();
     body.linearVelocity = direction * speed;
   }
-
-  // render method hata diya gaya hai
 }
