@@ -1,5 +1,5 @@
 import 'dart:ui' as ui;
-import 'package:vector_math/vector_math.dart' as vector_math; // <-- Step 1: नया import
+import 'package:vector_math/vector_math_64.dart' as vector_math_64; // <-- Use the 64-bit version
 
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
@@ -14,11 +14,11 @@ import 'package:shunya_runner/components/player.dart';
 
 void main() {
   runApp(
-    GameWidget(game: ShunyaRunnerGame()),
+    GameWidget(game: Shunya_RunnerGame()),
   );
 }
 
-class ShunyaRunnerGame extends Forge2DGame
+class Shunya_RunnerGame extends Forge2DGame
     with KeyboardEvents, PointerMoveCallbacks, TapCallbacks {
   late PlayerBody player;
   Vector2 mousePosition = Vector2.zero();
@@ -35,7 +35,7 @@ class ShunyaRunnerGame extends Forge2DGame
         image,
         ui.TileMode.repeated,
         ui.TileMode.repeated,
-        vector_math.Matrix4.identity().storage, // <-- Step 2: Prefix का इस्तेमाल
+        vector_math_64.Matrix4.identity().storage, // <-- Use the 64-bit Matrix4
       );
 
     add(
