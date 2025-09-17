@@ -1,5 +1,5 @@
 import 'package:flame/events.dart';
-import 'package:flame/game.dart' hide Vector2;
+import 'package:flame/game.dart' hide Vector2; // Aapka code waisa hi hai
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:flutter/material.dart' hide PointerMoveEvent;
 import 'package:flutter/services.dart';
@@ -39,15 +39,23 @@ class ShunyaRunnerGame extends Forge2DGame
     mousePosition = screenToWorld(event.localPosition);
   }
 
+  // SIRF YAHAN BADLAAV KIYA GAYA HAI
   @override
   void onTapDown(TapDownEvent event) {
     super.onTapDown(event);
-    final bullet = BulletBody(position: player.body.position.clone());
-
+    
+    // 1. Velocity pehle calculate karein
     final tapPosition = screenToWorld(event.localPosition);
     final direction = (tapPosition - player.body.position)..normalize();
+    final velocity = direction * 500.0;
 
-    bullet.body.linearVelocity = direction * 500.0;
+    // 2. Velocity ko constructor mein pass karein
+    final bullet = BulletBody(
+      position: player.body.position.clone(),
+      initialVelocity: velocity, // Naya parameter
+    );
+    
+    // 3. Ab add karein (ab koi error nahi aayega)
     add(bullet);
   }
 
