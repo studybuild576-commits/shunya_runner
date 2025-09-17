@@ -37,10 +37,10 @@ jobs:
       - name: Run Code Analysis
         run: flutter analyze
 
-      # Step 6: Code ki formatting check karega
+      # Step 6: Code ki formatting check karega (naya Dart command)
       - name: Check Code Formatting
-        - run: dart format --output=none --set-exit-if-changed .
-  
+        run: dart format --output=none --set-exit-if-changed .
+
       # Step 7: Debug APK build karega (Bina signing ke)
       - name: Build Debug APK
         run: flutter build apk --debug
