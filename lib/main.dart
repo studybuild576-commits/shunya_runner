@@ -1,9 +1,9 @@
-import 'dart:ui' as ui; // <-- यह नया import जोड़ना है
+import 'dart:ui' as ui;
+import 'package:vector_math/vector_math.dart' as vector_math; // <-- Step 1: नया import
 
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
-// 'package:flame/parallax.dart'; // <-- इसकी अब ज़रूरत नहीं है
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:flutter/material.dart' hide PointerMoveEvent;
 import 'package:flutter/services.dart';
@@ -29,21 +29,19 @@ class ShunyaRunnerGame extends Forge2DGame
     camera.viewfinder.zoom = 1.5;
     camera.viewfinder.anchor = Anchor.center;
 
-    // A more stable way to create a repeating background
-    // that avoids issues with different Flame versions.
     final image = await images.load('floor_tile.png');
     final paint = Paint()
       ..shader = ui.ImageShader(
         image,
-        ui.TileMode.repeated, // Repeat horizontally
-        ui.TileMode.repeated, // Repeat vertically
-        Matrix4.identity().storage,
+        ui.TileMode.repeated,
+        ui.TileMode.repeated,
+        vector_math.Matrix4.identity().storage, // <-- Step 2: Prefix का इस्तेमाल
       );
 
     add(
       SpriteComponent(
         size: Vector2.all(400),
-        paint: paint, // Apply the repeating paint
+        paint: paint,
       )..anchor = Anchor.center,
     );
 
