@@ -1,6 +1,6 @@
 import 'package:flame/events.dart';
-// YAHAN BADLAAV KIYA GAYA HAI
-import 'package:flame/game.dart' hide Vector2; 
+import 'package:flame/extensions.dart'; // for .toOffset()
+import 'package:flame/game.dart' hide Vector2;
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:flutter/material.dart' hide PointerMoveEvent;
 import 'package:flutter/services.dart';
@@ -9,9 +9,7 @@ import 'package:shunya_runner/components/enemy.dart';
 import 'package:shunya_runner/components/player.dart';
 
 void main() {
-  runApp(
-    GameWidget(game: ShunyaRunnerGame()),
-  );
+  runApp(GameWidget(game: ShunyaRunnerGame()));
 }
 
 class ShunyaRunnerGame extends Forge2DGame
@@ -46,19 +44,16 @@ class ShunyaRunnerGame extends Forge2DGame
   void onTapDown(TapDownEvent event) {
     super.onTapDown(event);
     final bullet = BulletBody(position: player.body.position.clone());
-    
+
     final tapPosition = screenToWorld(event.localPosition);
     final direction = (tapPosition - player.body.position)..normalize();
-    
+
     bullet.body.linearVelocity = direction * 500.0;
     add(bullet);
   }
 
   @override
-  KeyEventResult onKeyEvent(
-    KeyEvent event,
-    Set<LogicalKeyboardKey> keysPressed,
-  ) {
+  KeyEventResult onKeyEvent(KeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
     Vector2 newMovement = Vector2.zero();
 
     if (keysPressed.contains(LogicalKeyboardKey.keyW)) newMovement.y = -1;
