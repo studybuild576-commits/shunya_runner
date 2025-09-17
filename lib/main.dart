@@ -30,7 +30,7 @@ class ShunyaRunnerGame extends Forge2DGame
     camera.viewfinder.anchor = Anchor.center;
 
     final image = await images.load('floor_tile.png');
-    final sprite = Sprite(image); // <-- Step 1: Create the Sprite object
+    final sprite = Sprite(image);
     final paint = Paint()
       ..shader = ui.ImageShader(
         image,
@@ -41,7 +41,7 @@ class ShunyaRunnerGame extends Forge2DGame
 
     add(
       SpriteComponent(
-        sprite: sprite, // <-- Step 2: Pass the sprite to the component
+        sprite: sprite,
         size: Vector2.all(400),
         paint: paint,
       )..anchor = Anchor.center,
@@ -49,17 +49,19 @@ class ShunyaRunnerGame extends Forge2DGame
 
     add(Arena(size: Vector2.all(200)));
 
-    player = PlayerBody(position: Vector2.zero());
+    player = PlayerBody(initialPosition: Vector2.zero());
     add(player);
 
-    add(EnemyBody(position: Vector2(100, 100), player: player));
-    add(EnemyBody(position: Vector2(-100, -100), player: player));
+    add(EnemyBody(initialPosition: Vector2(100, 100), player: player));
+    add(EnemyBody(initialPosition: Vector2(-100, -100), player: player));
   }
 
   @override
   void update(double dt) {
     super.update(dt);
-    player.lookAt(mousePosition);
+    if (player.isMounted) {
+      player.lookAt(mousePosition);
+    }
   }
 
   @override
@@ -70,11 +72,12 @@ class ShunyaRunnerGame extends Forge2DGame
   @override
   void onTapDown(TapDownEvent event) {
     super.onTapDown(event);
+    if (!player.isMounted) return;
     final tapPosition = screenToWorld(event.localPosition);
     final direction = (tapPosition - player.body.position)..normalize();
     final velocity = direction * 500.0;
     final bullet = BulletBody(
-      position: player.body.position.clone(),
+      initialPosition: player.body.position.clone(),
       initialVelocity: velocity,
     );
     add(bullet);
