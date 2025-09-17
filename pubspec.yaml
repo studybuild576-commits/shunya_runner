@@ -9,7 +9,6 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
   cupertino_icons: ^1.0.8
   flame: ^1.17.0
   flame_forge2d: ^0.18.0
@@ -17,10 +16,8 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
   flutter_lints: ^4.0.0
 
-# YEH SECTION SABSE ZAROORI HAI AUR ISKI JAGAH YAHI HAI
 dependency_overrides:
   vector_math: ^2.1.4
 
