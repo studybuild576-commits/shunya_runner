@@ -1,7 +1,7 @@
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
-import 'package:flame/parallax.dart'; // <-- यह लाइन जोड़नी है
+import 'package:flame/parallax.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:flutter/material.dart' hide PointerMoveEvent;
 import 'package:flutter/services.dart';
@@ -32,7 +32,7 @@ class ShunyaRunnerGame extends Forge2DGame
         ParallaxImageData('floor_tile.png'),
       ],
       baseVelocity: Vector2.zero(),
-      fill: LayerFill.repeat,
+      fill: LayerFill.both, // <-- 'repeat' को 'both' से बदल दिया है
       size: Vector2.all(400),
     );
     add(
