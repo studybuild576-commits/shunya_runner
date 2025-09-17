@@ -1,5 +1,5 @@
 name: shunya_runner
-description: "A 2D top-down action rogulite."
+description: "A 2D top-down action roguelite."
 publish_to: 'none'
 version: 1.0.0+1
 
@@ -20,7 +20,7 @@ dev_dependencies:
 
   flutter_lints: ^4.0.0
 
-# NAYA SECTION: Yeh Vector2 ki error ko theek karega
+# Vector2 ki error ko theek karne ke liye yeh section add karein
 dependency_overrides:
   vector_math: ^2.1.4
 
