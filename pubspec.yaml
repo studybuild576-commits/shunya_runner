@@ -12,17 +12,13 @@ dependencies:
 
   cupertino_icons: ^1.0.8
   flame: ^1.17.0
-  flame_forge2d: ^0.17.0
+  flame_forge2d: ^0.18.0   # 🔥 updated version (Vector2 conflict fix)
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
   flutter_lints: ^4.0.0
-
-# Vector2 ki error ko theek karne ke liye yeh section ZAROORI hai
-dependency_overrides:
-  vector_math: ^2.1.4
 
 flutter:
   uses-material-design: true
