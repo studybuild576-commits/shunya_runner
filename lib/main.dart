@@ -1,8 +1,9 @@
+// YEH IMPORT ZAROORI HAI
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
-import 'package:flutter/material.dart' hide PointerMoveEvent;
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shunya_runner/components/arena.dart';
 import 'package:shunya_runner/components/bullet.dart';
