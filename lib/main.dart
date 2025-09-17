@@ -1,26 +1,21 @@
 import 'package:flame/components.dart';
-import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:vector_math/vector_math_64.dart' as vm; // Matrix4 conflict fix
 
-import 'package:shunya_runner/components/arena.dart';
-import 'package:shunya_runner/components/bullet.dart';
-import 'package:shunya_runner/components/enemy.dart';
-import 'package:shunya_runner/components/player.dart';
+import 'components/player.dart';
+import 'components/enemy.dart';
+import 'components/bullet.dart';
+import 'components/arena.dart';
 
 void main() {
-  runApp(
-    GameWidget(game: ShunyaRunnerGame()),
-  );
+  runApp(GameWidget(game: ShunyaRunnerGame()));
 }
 
-class ShunyaRunnerGame extends Forge2DGame {
+class ShunyaRunnerGame extends Forge2DGame with HasKeyboardHandlerComponents, HasDraggables, HasTappables {
   late PlayerBody player;
-  Vector2 mousePosition = Vector2.zero();
 
   ShunyaRunnerGame() : super(gravity: Vector2.zero());
 
@@ -28,55 +23,35 @@ class ShunyaRunnerGame extends Forge2DGame {
   Future<void> onLoad() async {
     await super.onLoad();
 
-    // CAMERA SETTINGS
+    // Camera zoom
     camera.viewfinder.zoom = 1.5;
 
-    // FLOOR TILE (seamless repeat)
-    final sprite = await loadSprite('floor_tile.png');
-    add(
-      SpriteComponent(
-        sprite: sprite,
-        size: Vector2.all(2000),
-        anchor: Anchor.topLeft,
-        paint: Paint()
-          ..shader = ImageShader(
-            sprite.image,
-            TileMode.repeated,
-            TileMode.repeated,
-            vm.Matrix4.identity().storage,
-          ),
-      ),
-    );
-
-    // ARENA
+    // Arena
     add(Arena(size: Vector2.all(200)));
 
-    // PLAYER
+    // Player
     player = PlayerBody(position: Vector2.zero());
     add(player);
 
-    // ENEMIES
+    // Enemies
     add(EnemyBody(position: Vector2(100, 100), player: player));
     add(EnemyBody(position: Vector2(-100, -100), player: player));
-
-    // INPUT HANDLER COMPONENTS
-    add(KeyboardHandler(player: player));
-    add(MouseHandler(player: player));
   }
 
   @override
   void update(double dt) {
     super.update(dt);
 
-    // CAMERA FOLLOW PLAYER
-    camera.position = player.body.position;
+    // Camera follow player
+    camera.followVector2(player.body.position);
   }
 }
 
 // Keyboard input handler
-class KeyboardHandler extends Component with KeyboardHandlerComponent {
+class PlayerKeyboard extends Component with KeyboardHandlerComponent {
   final PlayerBody player;
-  KeyboardHandler({required this.player});
+
+  PlayerKeyboard({required this.player});
 
   @override
   KeyEventResult onKeyEvent(KeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
@@ -85,32 +60,34 @@ class KeyboardHandler extends Component with KeyboardHandlerComponent {
     if (keysPressed.contains(LogicalKeyboardKey.keyS)) newMovement.y = 1;
     if (keysPressed.contains(LogicalKeyboardKey.keyA)) newMovement.x = -1;
     if (keysPressed.contains(LogicalKeyboardKey.keyD)) newMovement.x = 1;
+
     player.movement = newMovement;
     return KeyEventResult.handled;
   }
 }
 
-// Mouse / tap input handler
-class MouseHandler extends Component with TapCallbacks, DragCallbacks {
+// Mouse drag & tap handler
+class PlayerMouse extends PositionComponent with TapDetector, DragDetector {
   final PlayerBody player;
-  Vector2 mousePosition = Vector2.zero();
 
-  MouseHandler({required this.player});
+  PlayerMouse({required this.player});
 
   @override
-  bool onTapDown(int pointerId, TapDownInfo info) {
+  void onTapDown(TapDownInfo info) {
     final tapPosition = info.eventPosition.game;
     final direction = (tapPosition - player.body.position)..normalize();
     final velocity = direction * 500.0;
-    final bullet = BulletBody(position: player.body.position.clone(), initialVelocity: velocity);
-    player.parent?.add(bullet);
-    return true;
+
+    final bullet = BulletBody(
+      position: player.body.position.clone(),
+      initialVelocity: velocity,
+    );
+    parent?.add(bullet);
   }
 
   @override
-  bool onDragUpdate(int pointerId, DragUpdateInfo info) {
-    mousePosition = info.eventPosition.game;
-    player.lookAt(mousePosition);
-    return true;
+  void onDragUpdate(DragUpdateInfo info) {
+    final pos = info.eventPosition.game;
+    player.lookAt(pos);
   }
 }
