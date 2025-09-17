@@ -1,0 +1,63 @@
+# Workflow ka naam
+name: Build Signed Android APK
+
+# Yeh workflow kab chalega: jab 'main' branch mein code push hoga
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    # Kis machine par chalega
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Aapke repo ka code download karega
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      # Step 2: Java (JDK) set up karega jo Android build ke liye zaroori hai
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      # Step 3: Flutter environment set up karega
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+
+      # Step 4: Keystore file ko GitHub Secrets se decode karke file banayega
+      - name: Decode Keystore
+        env:
+          KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
+        run: echo $KEYSTORE_BASE64 | base64 --decode > android/app/upload-keystore.jks
+
+      # Step 5: Keystore ki details ke liye key.properties file banayega
+      - name: Create key.properties
+        env:
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+        run: |
+          echo "storePassword=$KEYSTORE_PASSWORD" > android/key.properties
+          echo "keyPassword=$KEY_PASSWORD" >> android/key.properties
+          echo "keyAlias=$KEY_ALIAS" >> android/key.properties
+          echo "storeFile=upload-keystore.jks" >> android/key.properties
+
+      # Step 6: Flutter dependencies install karega
+      - name: Install Dependencies
+        run: flutter pub get
+
+      # Step 7: Release APK build karega
+      - name: Build APK
+        run: flutter build apk --release
+
+      # Step 8: Build hui APK file ko "Artifacts" mein upload karega
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-apk
+          path: build/app/outputs/flutter-apk/app-release.apk
