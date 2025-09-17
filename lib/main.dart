@@ -1,5 +1,4 @@
 import 'package:flame/events.dart';
-import 'package:flame/extensions.dart'; // for .toOffset()
 import 'package:flame/game.dart' hide Vector2;
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:flutter/material.dart' hide PointerMoveEvent;
