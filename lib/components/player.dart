@@ -2,6 +2,11 @@ import 'dart:math';
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:flutter/material.dart';
 
+// Extension to convert Vector2 to Offset
+extension Vector2Extension on Vector2 {
+  Offset toOffset() => Offset(x, y);
+}
+
 class PlayerBody extends BodyComponent {
   @override
   final Vector2 position;
