@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:shunya_runner/components/player.dart';
 
 class EnemyBody extends BodyComponent with ContactCallbacks {
+  @override
   final Vector2 position;
   final double radius = 9.0;
   final double speed = 100.0;
