@@ -1,5 +1,5 @@
 import 'dart:ui' as ui;
-import 'package.vector_math/vector_math_64.dart' as vector_math_64;
+import 'package:vector_math/vector_math_64.dart' as vector_math_64;
 
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
