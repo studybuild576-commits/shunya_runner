@@ -1,11 +1,6 @@
 import 'dart:math';
+import 'package:flame/components.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
-import 'package:flutter/material.dart';
-
-// Extension: Vector2 -> Offset
-extension Vector2Extension on Vector2 {
-  Offset toOffset() => Offset(x, y);
-}
 
 class PlayerBody extends BodyComponent {
   @override
@@ -15,6 +10,20 @@ class PlayerBody extends BodyComponent {
   final double speed = 200.0;
 
   PlayerBody({required this.position});
+
+  @override
+  Future<void> onLoad() async {
+    await super.onLoad();
+    // Sprite (image) ko load karega
+    final sprite = await game.loadSprite('player.png');
+    add(
+      SpriteComponent(
+        sprite: sprite,
+        size: Vector2.all(radius * 2.5), // Image ka size adjust kiya
+        anchor: Anchor.center,
+      ),
+    );
+  }
 
   @override
   Body createBody() {
@@ -27,13 +36,12 @@ class PlayerBody extends BodyComponent {
     );
     final playerBody = world.createBody(bodyDef);
 
-    final shape = CircleShape()..radius = radius;
+    // CircleShape banane ka sahi tarika
+    final shape = CircleShape(radius: radius);
 
     final fixtureDef = FixtureDef(shape)
       ..density = 1.0
-      ..friction = 0.4
-      ..restitution = 0.1;
-
+      ..friction = 0.4;
     playerBody.createFixture(fixtureDef);
     return playerBody;
   }
@@ -41,30 +49,11 @@ class PlayerBody extends BodyComponent {
   @override
   void update(double dt) {
     super.update(dt);
-    if (!isMounted) return; // ✅ ensure body is initialized
     body.linearVelocity = movement * speed;
   }
-
+  
   void lookAt(Vector2 target) {
-    if (!isMounted) return; // ✅ avoid crash
     final angle = atan2(target.y - body.position.y, target.x - body.position.x);
     body.setTransform(body.position, angle);
-  }
-
-  @override
-  void render(Canvas canvas) {
-    super.render(canvas);
-    final paint = Paint()
-      ..color = Colors.blue
-      ..style = PaintingStyle.fill;
-    canvas.drawCircle(Offset.zero, radius, paint);
-
-    if (!isMounted) return; // ✅ skip if body not ready
-    final directionPaint = Paint()
-      ..color = Colors.white
-      ..strokeWidth = 2;
-    final directionVector =
-        Vector2(cos(body.angle) * radius, sin(body.angle) * radius);
-    canvas.drawLine(Offset.zero, directionVector.toOffset(), directionPaint);
   }
 }
