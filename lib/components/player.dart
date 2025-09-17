@@ -1,9 +1,5 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
-
-// Explicitly import Vector2 from vector_math_64
-import 'package:vector_math/vector_math_64.dart' show Vector2;
-
 import 'package:flame_forge2d/flame_forge2d.dart';
 
 class PlayerBody extends BodyComponent {
