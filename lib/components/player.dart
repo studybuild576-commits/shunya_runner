@@ -1,10 +1,8 @@
 import 'dart:math';
-import 'package:flame/extensions.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:flutter/material.dart';
 
 class PlayerBody extends BodyComponent {
-  // YAHAN BADLAAV KIYA GAYA HAI: @override add kiya
   @override
   final Vector2 position;
   final double radius = 8.0;
