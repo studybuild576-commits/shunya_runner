@@ -1,6 +1,6 @@
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:flutter/material.dart';
-import 'package:shunya_runner/components/enemy.dart';
+import 'package.shunya_runner/components/enemy.dart';
 
 class BulletBody extends BodyComponent with ContactCallbacks {
   @override
@@ -19,7 +19,9 @@ class BulletBody extends BodyComponent with ContactCallbacks {
     );
 
     final bulletBody = world.createBody(bodyDef);
-    final shape = CircleShape()..radius = radius;
+    
+    // YAHAN BADLAAV KIYA GAYA HAI: CircleShape banane ka sahi tarika
+    final shape = CircleShape(radius: radius);
 
     final fixtureDef = FixtureDef(shape)..isSensor = true;
     bulletBody.createFixture(fixtureDef);
@@ -30,7 +32,7 @@ class BulletBody extends BodyComponent with ContactCallbacks {
   @override
   void beginContact(Object other, Contact contact) {
     if (other is EnemyBody) {
-      // ✅ safe removal
+      // ✅ safe removal (Aapka code)
       other.removeFromParent();
       removeFromParent();
     }
@@ -39,7 +41,7 @@ class BulletBody extends BodyComponent with ContactCallbacks {
   @override
   void update(double dt) {
     super.update(dt);
-    if (!isMounted) return; // ✅ ensure body is ready
+    if (!isMounted) return; // ✅ ensure body is ready (Aapka code)
   }
 
   @override
