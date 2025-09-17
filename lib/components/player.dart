@@ -1,5 +1,4 @@
 import 'dart:math';
-import 'extensions/vector2_extension.dart';
 import 'package:flame/extensions.dart' as flame_ext; // ✅ alias
 import 'package:flame_forge2d/flame_forge2d.dart'; // ✅ Vector2 yahi se use hoga
 import 'package:flutter/material.dart';
