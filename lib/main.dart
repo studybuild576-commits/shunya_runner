@@ -1,3 +1,4 @@
+import 'extensions/vector2_extension.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart' hide Vector2; // ✅ hide Vector2 to avoid clash
 import 'package:flame_forge2d/flame_forge2d.dart' show Forge2DGame, Vector2;
