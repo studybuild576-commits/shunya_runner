@@ -1,47 +1,48 @@
 # Workflow ka naam
 name: Analyze and Build Debug APK
 
-# Yeh workflow kab chalega: jab 'main' branch mein code push hoga
+# Kab chalega: jab bhi main branch me push hoga
 on:
   push:
     branches: [ main ]
+  pull_request:
 
 jobs:
   build:
-    # Kis machine par chalega
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Aapke repo ka code download karega
+      # Step 1: Repo checkout
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      # Step 2: Java (JDK) set up karega
+      # Step 2: Java setup
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: '17'
 
-      # Step 3: Flutter environment set up karega
+      # Step 3: Flutter setup
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
+          cache: true
 
-      # Step 4: Flutter dependencies install karega
+      # Step 4: Dependencies install
       - name: Install Dependencies
         run: flutter pub get
 
-      # Step 5: Code ko analyze karega
-      - name: Run Code Analysis
+      # Step 5: Code analysis
+      - name: Run Analyzer
         run: flutter analyze
 
-      # Step 7: Debug APK build karega (Bina signing ke)
+      # Step 6: Debug APK build
       - name: Build Debug APK
         run: flutter build apk --debug
 
-      # Step 8: Build hui APK file ko "Artifacts" mein upload karega
+      # Step 7: Upload APK as artifact
       - name: Upload Debug APK
         uses: actions/upload-artifact@v4
         with:
