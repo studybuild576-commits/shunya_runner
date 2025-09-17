@@ -4,25 +4,20 @@ publish_to: 'none'
 version: 1.0.0+1
 
 environment:
-  sdk: '>=3.4.0 <4.0.0'
+  sdk: '>=3.4.0 <4.0.0'
 
 dependencies:
-  flutter:
-    sdk: flutter
+  flutter:
+    sdk: flutter
 
-  cupertino_icons: ^1.0.8
-  flame: ^1.17.0
-  flame_forge2d: ^0.18.0
+  cupertino_icons: ^1.0.8
+  flame: ^1.17.0
+  flame_forge2d: ^0.19.0
 
 dev_dependencies:
-  flutter_test:
-    sdk: flutter
-
-  flutter_lints: ^4.0.0
-
-# Yeh section Vector2 ki saari errors ko theek karta hai
-dependency_overrides:
-  vector_math: ^2.1.4
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
 
 flutter:
-  uses-material-design: true
+  uses-material-design: true
