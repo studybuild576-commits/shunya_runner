@@ -1,5 +1,6 @@
 import 'package:flame/events.dart';
-import 'package:flame/game.dart';
+// YAHAN BADLAAV KIYA GAYA HAI
+import 'package:flame/game.dart' hide Vector2; 
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:flutter/material.dart' hide PointerMoveEvent;
 import 'package:flutter/services.dart';
