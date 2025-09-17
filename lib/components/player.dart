@@ -1,6 +1,6 @@
 import 'dart:math';
-import 'package:flame/extensions.dart'; // ✅ needed for toOffset()
-import 'package:flame_forge2d/flame_forge2d.dart';
+import 'package:flame/extensions.dart' as flame_ext; // ✅ alias
+import 'package:flame_forge2d/flame_forge2d.dart'; // ✅ Vector2 yahi se use hoga
 import 'package:flutter/material.dart';
 
 class PlayerBody extends BodyComponent {
@@ -53,7 +53,17 @@ class PlayerBody extends BodyComponent {
     final directionPaint = Paint()
       ..color = Colors.white
       ..strokeWidth = 2;
-    final directionVector = Vector2(cos(body.angle) * radius, sin(body.angle) * radius);
-    canvas.drawLine(Offset.zero, directionVector.toOffset(), directionPaint);
+
+    final directionVector = Vector2(
+      cos(body.angle) * radius,
+      sin(body.angle) * radius,
+    );
+
+    // ✅ use flame_ext alias for toOffset()
+    canvas.drawLine(
+      Offset.zero,
+      flame_ext.Vector2(directionVector.x, directionVector.y).toOffset(),
+      directionPaint,
+    );
   }
 }
