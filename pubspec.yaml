@@ -20,9 +20,5 @@ dev_dependencies:
 
   flutter_lints: ^4.0.0
 
-# Yeh section Vector2 ki saari errors ko theek karta hai
-dependency_overrides:
-  vector_math: ^2.1.4
-
 flutter:
   uses-material-design: true
