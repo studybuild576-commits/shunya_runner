@@ -1,9 +1,9 @@
+// YEH IMPORT LINE SABSE ZAROORI HAI
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
-// YAHAN BADLAAV KIYA GAYA HAI
-import 'package:flutter/material.dart' hide PointerMoveEvent;
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shunya_runner/components/arena.dart';
 import 'package:shunya_runner/components/bullet.dart';
@@ -32,7 +32,7 @@ class ShunyaRunnerGame extends Forge2DGame
       SpriteRepeatComponent(
         sprite: sprite,
         size: Vector2.all(400),
-      )..anchor = Anchor.center,
+      )..anchor = Anchor.center
     );
 
     add(Arena(size: Vector2.all(200)));
