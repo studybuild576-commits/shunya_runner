@@ -13,6 +13,7 @@ dependencies:
   cupertino_icons: ^1.0.8
   flame: ^1.17.0
   flame_forge2d: ^0.19.2
+  vector_math: ^2.1.4 # <-- इसे यहाँ होना चाहिए
 
 dev_dependencies:
   flutter_test:
@@ -20,9 +21,7 @@ dev_dependencies:
 
   flutter_lints: ^4.0.0
 
-# Yeh section saari dependency problems theek karta hai
-dependency_overrides:
-  vector_math: ^2.1.4
+# dependency_overrides वाले सेक्शन को यहाँ से हटा दें
 
 flutter:
   uses-material-design: true
