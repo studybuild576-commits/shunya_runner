@@ -1,6 +1,6 @@
 import 'dart:math';
-// YAHAN BADLAAV KIYA GAYA HAI
-import 'package:flame/extensions.dart' hide Vector2;
+// BADLAAV 1: Import ko simple kiya gaya
+import 'package:flame/extensions.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:flutter/material.dart';
 
@@ -23,7 +23,10 @@ class PlayerBody extends BodyComponent {
       userData: this,
     );
     final playerBody = world.createBody(bodyDef);
-    final shape = CircleShape()...radius = radius;
+    
+    // BADLAAV 2: CircleShape banane ka sahi tarika
+    final shape = CircleShape(radius: radius);
+
     final fixtureDef = FixtureDef(shape)
       ..density = 1.0
       ..friction = 0.4
@@ -54,7 +57,6 @@ class PlayerBody extends BodyComponent {
     final directionPaint = Paint()
       ..color = Colors.white
       ..strokeWidth = 2;
-    // Yeh code ab sahi se chalega
     final directionVector = Vector2(cos(body.angle) * radius, sin(body.angle) * radius);
     canvas.drawLine(Offset.zero, directionVector.toOffset(), directionPaint);
   }
