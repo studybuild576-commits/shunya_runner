@@ -2,8 +2,8 @@ import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
-import 'package.flutter/material.dart' hide PointerMoveEvent;
-import 'package.flutter/services.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:shunya_runner/components/arena.dart';
 import 'package:shunya_runner/components/bullet.dart';
 import 'package:shunya_runner/components/enemy.dart';
@@ -23,20 +23,17 @@ class ShunyaRunnerGame extends Forge2DGame
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-    // Camera ka zoom adjust kiya taaki arena theek se dikhe
     camera.viewfinder.zoom = 1.5;
     camera.viewfinder.anchor = Anchor.center;
 
-    // NAYI LINES: Background add kiya
     final sprite = await loadSprite('floor_tile.png');
     add(
       SpriteRepeatComponent(
         sprite: sprite,
         size: Vector2.all(400),
-      )..anchor = Anchor.center,
+      )..anchor = Anchor.center
     );
 
-    // NAYI LINES: Arena (walls) add kiya
     add(Arena(size: Vector2.all(200)));
 
     player = PlayerBody(position: Vector2.zero());
