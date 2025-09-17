@@ -14,11 +14,11 @@ import 'package:shunya_runner/components/player.dart';
 
 void main() {
   runApp(
-    GameWidget(game: ShunyaRunnerGame()), // Corrected name
+    GameWidget(game: ShunyaRunnerGame()),
   );
 }
 
-class ShunyaRunnerGame extends Forge2DGame // Corrected name
+class ShunyaRunnerGame extends Forge2DGame
     with KeyboardEvents, PointerMoveCallbacks, TapCallbacks {
   late PlayerBody player;
   Vector2 mousePosition = Vector2.zero();
@@ -30,6 +30,7 @@ class ShunyaRunnerGame extends Forge2DGame // Corrected name
     camera.viewfinder.anchor = Anchor.center;
 
     final image = await images.load('floor_tile.png');
+    final sprite = Sprite(image); // <-- Step 1: Create the Sprite object
     final paint = Paint()
       ..shader = ui.ImageShader(
         image,
@@ -40,6 +41,7 @@ class ShunyaRunnerGame extends Forge2DGame // Corrected name
 
     add(
       SpriteComponent(
+        sprite: sprite, // <-- Step 2: Pass the sprite to the component
         size: Vector2.all(400),
         paint: paint,
       )..anchor = Anchor.center,
