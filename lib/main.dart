@@ -1,7 +1,8 @@
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
-import 'package:flutter/material.dart';
+// YAHAN BADLAAV KIYA GAYA HAI
+import 'package:flutter/material.dart' hide PointerMoveEvent; 
 import 'package:flutter/services.dart';
 import 'package:shunya_runner/components/bullet.dart';
 import 'package:shunya_runner/components/player.dart';
@@ -36,13 +37,11 @@ class ShunyaRunnerGame extends Forge2DGame
     mousePosition = screenToWorld(event.localPosition);
   }
 
-  // YAHAN BADLAAV KIYA GAYA HAI
   @override
   void onTapDown(TapDownEvent event) {
     super.onTapDown(event);
     final bullet = BulletBody(position: player.body.position.clone());
     
-    // Tap ki position naye tarike se nikaali gayi hai
     final tapPosition = screenToWorld(event.localPosition);
     final direction = (tapPosition - player.body.position)..normalize();
     
