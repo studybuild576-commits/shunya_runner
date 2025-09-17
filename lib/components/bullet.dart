@@ -6,9 +6,18 @@ import 'package:shunya_runner/components/enemy.dart';
 class BulletBody extends BodyComponent with ContactCallbacks {
   @override
   final Vector2 position;
+  final Vector2 initialVelocity; // BADLAAV 1: Naya variable
   final double radius = 1.5;
 
-  BulletBody({required this.position});
+  // BADLAAV 2: Constructor ko update kiya
+  BulletBody({required this.position, required this.initialVelocity});
+
+  // BADLAAV 3: Naya method jo body banne ke baad velocity set karega
+  @override
+  Future<void> onLoad() async {
+    await super.onLoad();
+    body.linearVelocity = initialVelocity;
+  }
 
   @override
   Body createBody() {
@@ -19,7 +28,10 @@ class BulletBody extends BodyComponent with ContactCallbacks {
       userData: this,
     );
     final bulletBody = world.createBody(bodyDef);
-    final shape = CircleShape()..radius = radius;
+    
+    // BADLAAV 4: CircleShape banane ka sahi tarika
+    final shape = CircleShape(radius: radius);
+
     final fixtureDef = FixtureDef(shape)..isSensor = true;
     bulletBody.createFixture(fixtureDef);
     return bulletBody;
