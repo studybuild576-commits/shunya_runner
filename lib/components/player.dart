@@ -41,10 +41,12 @@ class PlayerBody extends BodyComponent {
   @override
   void update(double dt) {
     super.update(dt);
+    if (!isMounted) return; // ✅ ensure body is initialized
     body.linearVelocity = movement * speed;
   }
 
   void lookAt(Vector2 target) {
+    if (!isMounted) return; // ✅ avoid crash
     final angle = atan2(target.y - body.position.y, target.x - body.position.x);
     body.setTransform(body.position, angle);
   }
@@ -57,6 +59,7 @@ class PlayerBody extends BodyComponent {
       ..style = PaintingStyle.fill;
     canvas.drawCircle(Offset.zero, radius, paint);
 
+    if (!isMounted) return; // ✅ skip if body not ready
     final directionPaint = Paint()
       ..color = Colors.white
       ..strokeWidth = 2;
