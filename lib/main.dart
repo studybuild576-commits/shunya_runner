@@ -16,7 +16,6 @@ void main() {
 
 class ShunyaRunnerGame extends Forge2DGame
     with KeyboardEvents, PointerMoveCallbacks, TapCallbacks {
-  // BADLAAV 1: Nullable (?) hata kar 'late' ka istemaal kiya, isse code saaf ho jaayega
   late PlayerBody player;
   Vector2 mousePosition = Vector2.zero();
 
@@ -24,14 +23,11 @@ class ShunyaRunnerGame extends Forge2DGame
   Future<void> onLoad() async {
     await super.onLoad();
     camera.viewfinder.zoom = 10.0;
-    
-    // BADLAAV 2: Camera ko center mein set kiya
     camera.viewfinder.anchor = Anchor.center;
 
     player = PlayerBody(position: Vector2.zero());
-    add(player); // Ab '!' ki zaroorat nahi
+    add(player);
 
-    // Ab '!' ki zaroorat nahi
     add(EnemyBody(position: Vector2(100, 100), player: player));
     add(EnemyBody(position: Vector2(-100, -100), player: player));
   }
@@ -39,7 +35,6 @@ class ShunyaRunnerGame extends Forge2DGame
   @override
   void update(double dt) {
     super.update(dt);
-    // Ab 'if' check ki zaroorat nahi
     player.lookAt(mousePosition);
   }
 
@@ -51,12 +46,11 @@ class ShunyaRunnerGame extends Forge2DGame
   @override
   void onTapDown(TapDownEvent event) {
     super.onTapDown(event);
-    
-    // BADLAAV 3: Firing ka logic theek kiya taaki 'LateInitializationError' na aaye
     final tapPosition = screenToWorld(event.localPosition);
     final direction = (tapPosition - player.body.position)..normalize();
     final velocity = direction * 500.0;
-
+    
+    // Yeh ab sahi se kaam karega
     final bullet = BulletBody(
       position: player.body.position.clone(),
       initialVelocity: velocity,
@@ -69,7 +63,6 @@ class ShunyaRunnerGame extends Forge2DGame
     KeyEvent event,
     Set<LogicalKeyboardKey> keysPressed,
   ) {
-    // Ab 'if' check ki zaroorat nahi
     Vector2 newMovement = Vector2.zero();
     if (keysPressed.contains(LogicalKeyboardKey.keyW)) newMovement.y = -1;
     if (keysPressed.contains(LogicalKeyboardKey.keyS)) newMovement.y = 1;
