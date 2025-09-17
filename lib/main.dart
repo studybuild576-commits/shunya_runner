@@ -46,7 +46,6 @@ class ShunyaRunnerGame extends Forge2DGame
     super.onTapDown(event);
     final bullet = BulletBody(position: player.body.position.clone());
     
-    // Typo theek ki gayi hai: screenToWorld
     final tapPosition = screenToWorld(event.localPosition);
     final direction = (tapPosition - player.body.position)..normalize();
     
