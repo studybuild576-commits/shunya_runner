@@ -8,18 +8,17 @@ class PlayerBody extends BodyComponent {
   final double radius = 8.0;
   Vector2 movement = Vector2.zero();
   final double speed = 200.0;
-
+  
   PlayerBody({required this.position});
 
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-    // Sprite (image) ko load karega
     final sprite = await game.loadSprite('player.png');
     add(
       SpriteComponent(
         sprite: sprite,
-        size: Vector2.all(radius * 2.5), // Image ka size adjust kiya
+        size: Vector2.all(radius * 2.5),
         anchor: Anchor.center,
       ),
     );
@@ -27,21 +26,10 @@ class PlayerBody extends BodyComponent {
 
   @override
   Body createBody() {
-    final bodyDef = BodyDef(
-      type: BodyType.dynamic,
-      position: position,
-      fixedRotation: true,
-      linearDamping: 0.5,
-      userData: this,
-    );
+    final bodyDef = BodyDef(type: BodyType.dynamic, position: position, fixedRotation: true, linearDamping: 0.5, userData: this);
     final playerBody = world.createBody(bodyDef);
-
-    // CircleShape banane ka sahi tarika
     final shape = CircleShape(radius: radius);
-
-    final fixtureDef = FixtureDef(shape)
-      ..density = 1.0
-      ..friction = 0.4;
+    final fixtureDef = FixtureDef(shape)..density = 1.0..friction = 0.4;
     playerBody.createFixture(fixtureDef);
     return playerBody;
   }
