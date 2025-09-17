@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'package:flame/extensions.dart'; // ✅ needed for toOffset()
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:flutter/material.dart';
 
@@ -35,7 +36,7 @@ class PlayerBody extends BodyComponent {
     super.update(dt);
     body.linearVelocity = movement * speed;
   }
-  
+
   void lookAt(Vector2 target) {
     final angle = atan2(target.y - body.position.y, target.x - body.position.x);
     body.setTransform(body.position, angle);
