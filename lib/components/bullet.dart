@@ -1,5 +1,5 @@
 import 'package:flame_forge2d/flame_forge2d.dart';
-import 'package:flutter/material.dart';
+import 'pckage:flutter/material.dart';
 import 'package:shunya_runner/components/enemy.dart';
 
 class BulletBody extends BodyComponent with ContactCallbacks {
