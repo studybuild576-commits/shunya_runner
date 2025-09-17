@@ -1,9 +1,11 @@
 import 'dart:math';
-import 'package:flame/extensions.dart';
+import 'package.flame/extensions.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:flutter/material.dart';
 
 class PlayerBody extends BodyComponent {
+  // YAHAN BADLAAV KIYA GAYA HAI: @override add kiya
+  @override
   final Vector2 position;
   final double radius = 8.0;
   Vector2 movement = Vector2.zero();
@@ -16,8 +18,8 @@ class PlayerBody extends BodyComponent {
     final bodyDef = BodyDef(
       type: BodyType.dynamic,
       position: position,
-      fixedRotation: true, // Player takrane par ghume na
-      linearDamping: 0.5, // Movement ko smooth banane ke liye
+      fixedRotation: true,
+      linearDamping: 0.5,
       userData: this,
     );
     final playerBody = world.createBody(bodyDef);
@@ -49,7 +51,6 @@ class PlayerBody extends BodyComponent {
       ..style = PaintingStyle.fill;
     canvas.drawCircle(Offset.zero, radius, paint);
 
-    // Player ki disha dikhane ke liye ek line draw karein
     final directionPaint = Paint()
       ..color = Colors.white
       ..strokeWidth = 2;
