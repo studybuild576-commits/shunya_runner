@@ -1,7 +1,6 @@
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
-// YEH SABSE ZAROORI BADLAAV HAI
-import 'package:flame/game.dart' hide Vector2;
+import 'package:flame/game.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:flutter/material.dart' hide PointerMoveEvent;
 import 'package:flutter/services.dart';
@@ -27,12 +26,18 @@ class ShunyaRunnerGame extends Forge2DGame
     camera.viewfinder.zoom = 1.5;
     camera.viewfinder.anchor = Anchor.center;
 
-    final sprite = await loadSprite('floor_tile.png');
+    // This is the corrected code for the repeating background.
+    // SpriteRepeatComponent has been replaced with ParallaxComponent.
+    final parallax = await loadParallax(
+      [
+        ParallaxImageData('floor_tile.png'),
+      ],
+      baseVelocity: Vector2.zero(), // We set baseVelocity to zero for a static background
+      fill: LayerFill.repeat,      // This tells the component to repeat the image
+      size: Vector2.all(400),      // The area to fill with the repeating image
+    );
     add(
-      SpriteRepeatComponent(
-        sprite: sprite,
-        size: Vector2.all(400),
-      )..anchor = Anchor.center,
+      ParallaxComponent(parallax: parallax)..anchor = Anchor.center,
     );
 
     add(Arena(size: Vector2.all(200)));
