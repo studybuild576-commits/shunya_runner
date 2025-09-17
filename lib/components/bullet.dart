@@ -17,19 +17,29 @@ class BulletBody extends BodyComponent with ContactCallbacks {
       bullet: true,
       userData: this,
     );
+
     final bulletBody = world.createBody(bodyDef);
     final shape = CircleShape()..radius = radius;
+
     final fixtureDef = FixtureDef(shape)..isSensor = true;
     bulletBody.createFixture(fixtureDef);
+
     return bulletBody;
   }
 
   @override
   void beginContact(Object other, Contact contact) {
     if (other is EnemyBody) {
+      // ✅ safe removal
       other.removeFromParent();
       removeFromParent();
     }
+  }
+
+  @override
+  void update(double dt) {
+    super.update(dt);
+    if (!isMounted) return; // ✅ ensure body is ready
   }
 
   @override
