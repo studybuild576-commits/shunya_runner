@@ -1,5 +1,5 @@
 import 'package:flame/events.dart';
-import 'package:flame/game.dart' hide Vector2; // Aapka code waisa hi hai
+import 'package:flame/game.dart' hide Vector2;
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:flutter/material.dart' hide PointerMoveEvent;
 import 'package:flutter/services.dart';
@@ -13,7 +13,8 @@ void main() {
 
 class ShunyaRunnerGame extends Forge2DGame
     with KeyboardEvents, PointerMoveCallbacks, TapCallbacks {
-  late PlayerBody player;
+
+  PlayerBody? player; // nullable for safety
   Vector2 mousePosition = Vector2.zero();
 
   @override
@@ -22,16 +23,18 @@ class ShunyaRunnerGame extends Forge2DGame
     camera.viewfinder.zoom = 10.0;
 
     player = PlayerBody(position: Vector2.zero());
-    add(player);
+    add(player!);
 
-    add(EnemyBody(position: Vector2(100, 100), player: player));
-    add(EnemyBody(position: Vector2(-100, -100), player: player));
+    add(EnemyBody(position: Vector2(100, 100), player: player!));
+    add(EnemyBody(position: Vector2(-100, -100), player: player!));
   }
 
   @override
   void update(double dt) {
     super.update(dt);
-    player.lookAt(mousePosition);
+    if (player != null) {
+      player!.lookAt(mousePosition);
+    }
   }
 
   @override
@@ -39,28 +42,22 @@ class ShunyaRunnerGame extends Forge2DGame
     mousePosition = screenToWorld(event.localPosition);
   }
 
-  // SIRF YAHAN BADLAAV KIYA GAYA HAI
   @override
   void onTapDown(TapDownEvent event) {
     super.onTapDown(event);
-    
-    // 1. Velocity pehle calculate karein
-    final tapPosition = screenToWorld(event.localPosition);
-    final direction = (tapPosition - player.body.position)..normalize();
-    final velocity = direction * 500.0;
-
-    // 2. Velocity ko constructor mein pass karein
-    final bullet = BulletBody(
-      position: player.body.position.clone(),
-      initialVelocity: velocity, // Naya parameter
-    );
-    
-    // 3. Ab add karein (ab koi error nahi aayega)
-    add(bullet);
+    if (player != null) {
+      final bullet = BulletBody(position: player!.body.position.clone());
+      final tapPosition = screenToWorld(event.localPosition);
+      final direction = (tapPosition - player!.body.position)..normalize();
+      bullet.body.linearVelocity = direction * 500.0;
+      add(bullet);
+    }
   }
 
   @override
   KeyEventResult onKeyEvent(KeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
+    if (player == null) return KeyEventResult.ignored;
+
     Vector2 newMovement = Vector2.zero();
 
     if (keysPressed.contains(LogicalKeyboardKey.keyW)) newMovement.y = -1;
@@ -68,7 +65,7 @@ class ShunyaRunnerGame extends Forge2DGame
     if (keysPressed.contains(LogicalKeyboardKey.keyA)) newMovement.x = -1;
     if (keysPressed.contains(LogicalKeyboardKey.keyD)) newMovement.x = 1;
 
-    player.movement = newMovement;
+    player!.movement = newMovement;
     return super.onKeyEvent(event, keysPressed);
   }
 }
