@@ -31,7 +31,7 @@ class ShunyaRunnerGame extends Forge2DGame
   @override
   void update(double dt) {
     super.update(dt);
-    if (player != null && player!.body != null) {
+    if (player != null) {
       player!.lookAt(mousePosition);
     }
   }
@@ -44,7 +44,7 @@ class ShunyaRunnerGame extends Forge2DGame
   @override
   void onTapDown(TapDownEvent event) {
     super.onTapDown(event);
-    if (player != null && player!.body != null) {
+    if (player != null) {
       final bullet = BulletBody(position: player!.body.position.clone());
       final tapPosition = screenToWorld(event.localPosition);
       final direction = (tapPosition - player!.body.position)..normalize();
@@ -55,7 +55,7 @@ class ShunyaRunnerGame extends Forge2DGame
 
   @override
   KeyEventResult onKeyEvent(KeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
-    if (player == null || player!.body == null) {
+    if (player == null) {
       return KeyEventResult.ignored;
     }
 
