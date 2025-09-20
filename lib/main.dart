@@ -26,7 +26,7 @@ class ShunyaRunnerGame extends Forge2DGame
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-    camera.viewfinder.zoom = 1.5;
+    camera.viewfinder.zoom = 1.0;
     camera.viewfinder.anchor = Anchor.center;
 
     final image = await images.load('floor_tile.png');
@@ -47,7 +47,7 @@ class ShunyaRunnerGame extends Forge2DGame
       )..anchor = Anchor.center,
     );
 
-    add(Arena(size: Vector2.all(200)));
+    add(Arena(size: Vector2.all(400)));
 
     player = PlayerBody(initialPosition: Vector2.zero());
     add(player);
